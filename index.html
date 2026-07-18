@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toji Protocol — 365 Day Calisthenics Transformation</title>
+    <meta name="description" content="A 365-day bodyweight calisthenics program with a full exercise library, Nigerian-food nutrition plan, and progress tracking.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav-container">
+        <div class="nav-content">
+            <div class="logo"><span class="logo-mark"></span>Toji Protocol <span class="logo-sub">CALISTHENICS · 365</span></div>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">☰</button>
+            <div class="nav-buttons" id="navButtons">
+                <button onclick="showSection('dashboard')" class="active" id="btn-dashboard">Dashboard</button>
+                <button onclick="showSection('workout')" id="btn-workout">Today's Workout</button>
+                <button onclick="showSection('exercises')" id="btn-exercises">Exercise Library</button>
+                <button onclick="showSection('nutrition')" id="btn-nutrition">Nutrition</button>
+                <button onclick="showSection('progress')" id="btn-progress">Progress</button>
+                <button onclick="showSection('resources')" id="btn-resources">Resources</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+
+        <!-- ============ DASHBOARD ============ -->
+        <section id="dashboard" class="section-content active">
+            <div class="phase-banner">
+                <h2 id="currentPhase">Phase 1: Foundation</h2>
+                <p class="phase-description" id="phaseDescription">Building the base — Weeks 1-8</p>
+            </div>
+
+            <div class="dashboard">
+                <div class="card">
+                    <h3>Day Progress</h3>
+                    <div class="stat-number" id="currentDay">1</div>
+                    <p class="text-faint">of 365 days</p>
+                    <div class="progress-bar"><div class="progress-fill" id="overallProgress" style="width: 0.3%">0.3%</div></div>
+                </div>
+
+                <div class="card">
+                    <h3>Workouts Completed</h3>
+                    <div class="stat-number" id="workoutsCompleted">0</div>
+                    <p class="text-faint">total sessions</p>
+                    <div class="progress-bar"><div class="progress-fill" id="workoutProgress" style="width: 0%">0%</div></div>
+                </div>
+
+                <div class="card">
+                    <h3>Current Stats</h3>
+                    <div class="metric-grid">
+                        <div class="metric">
+                            <div class="metric-value" id="currentWeight">65</div>
+                            <div class="metric-label">Weight (kg)</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value" id="currentPushups">0</div>
+                            <div class="metric-label">Max Push-ups</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value" id="currentStreak">0</div>
+                            <div class="metric-label">Day Streak</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Hydration</h3>
+                    <p class="text-faint">Target: 8 glasses daily · tap to fill</p>
+                    <div class="water-tracker" id="waterTracker"></div>
+                </div>
+
+                <div class="card">
+                    <h3>Today's Focus</h3>
+                    <p id="todaysFocus" style="color: var(--text); font-size: 1.05rem;">Full Body Foundation</p>
+                    <div class="mt-1 text-faint">
+                        <strong style="color: var(--text-muted);">Duration:</strong> <span id="todayDuration">45 min</span><br>
+                        <strong style="color: var(--text-muted);">Intensity:</strong> <span id="todayIntensity">Beginner</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Weekly Challenge</h3>
+                    <p class="text-faint" id="weeklyChallenge">Complete all 7 workouts this week</p>
+                    <div class="progress-bar"><div class="progress-fill" id="weeklyProgress" style="width: 0%">0/7</div></div>
+                </div>
+            </div>
+
+            <div class="motivation-box">
+                "The only bad workout is the one that didn't happen."
+                <div class="quote-author">— UNKNOWN</div>
+            </div>
+
+            <div class="card" style="border-left-color: var(--brass);">
+                <h3>This Week</h3>
+                <div class="week-view" id="weekView"></div>
+            </div>
+        </section>
+
+        <!-- ============ WORKOUT ============ -->
+        <section id="workout" class="section-content">
+            <div class="day-selector">
+                <div class="day-info">
+                    <span id="workoutDate">July 17, 2026</span> — <span id="dayNumber">Day 1</span>
+                </div>
+                <div class="day-nav">
+                    <button onclick="changeDay(-1)">← Previous</button>
+                    <button onclick="jumpToDay()">Jump to Day</button>
+                    <button onclick="changeDay(1)">Next →</button>
+                </div>
+            </div>
+
+            <div class="workout-container" id="workoutContent"></div>
+
+            <div class="motivation-box" id="dailyMotivation"></div>
+
+            <div class="card">
+                <h3>Daily Checklist</h3>
+                <ul class="checklist" id="dailyChecklist"></ul>
+            </div>
+        </section>
+
+        <!-- ============ EXERCISE LIBRARY ============ -->
+        <section id="exercises" class="section-content">
+            <h2 class="page-heading">Exercise Library</h2>
+            <p class="section-lede">Every movement in the program, with full instructions and target muscles. Tap a card for the breakdown.</p>
+
+            <div class="section-tabs">
+                <button class="tab-btn active" onclick="filterExercises(this, 'all')">All</button>
+                <button class="tab-btn" onclick="filterExercises(this, 'push')">Push</button>
+                <button class="tab-btn" onclick="filterExercises(this, 'pull')">Pull</button>
+                <button class="tab-btn" onclick="filterExercises(this, 'legs')">Legs</button>
+                <button class="tab-btn" onclick="filterExercises(this, 'core')">Core</button>
+                <button class="tab-btn" onclick="filterExercises(this, 'mobility')">Mobility</button>
+            </div>
+
+            <div class="exercise-grid" id="exerciseGrid"></div>
+        </section>
+
+        <!-- ============ NUTRITION ============ -->
+        <section id="nutrition" class="section-content">
+            <h2 class="page-heading">Nutrition Plan — Nigerian Foods</h2>
+            <p class="section-lede">Budget-friendly, protein-forward meals built around what's available locally.</p>
+
+            <div class="dashboard">
+                <div class="card">
+                    <h3>Daily Targets</h3>
+                    <div class="metric-grid">
+                        <div class="metric"><div class="metric-value">2800</div><div class="metric-label">Calories</div></div>
+                        <div class="metric"><div class="metric-value">140g</div><div class="metric-label">Protein</div></div>
+                        <div class="metric"><div class="metric-value">350g</div><div class="metric-label">Carbs</div></div>
+                        <div class="metric"><div class="metric-value">70g</div><div class="metric-label">Fats</div></div>
+                    </div>
+                </div>
+
+                <div class="card" style="border-left-color: var(--brass);">
+                    <h3>Budget-Friendly Foods</h3>
+                    <ul class="ref-list">
+                        <li>Beans (Ewa) — high protein, cheap</li>
+                        <li>Eggs — complete protein</li>
+                        <li>Rice &amp; stew — energy dense</li>
+                        <li>Moi moi — protein rich</li>
+                        <li>Groundnuts (peanuts) — healthy fats</li>
+                        <li>Fish (Titus, mackerel) — omega-3</li>
+                        <li>Yam — complex carbs</li>
+                        <li>Plantain — potassium &amp; carbs</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Sample Daily Meal Plan</h3>
+                <div class="nutrition-grid">
+                    <div class="meal-card">
+                        <h4>Breakfast · 7:00 AM</h4>
+                        <p>3 boiled eggs<br>2 slices of wheat bread<br>1 banana<br>Glass of milk or soymilk</p>
+                    </div>
+                    <div class="meal-card">
+                        <h4>Mid-Morning · 10:00 AM</h4>
+                        <p>Handful of groundnuts<br>1 apple or orange</p>
+                    </div>
+                    <div class="meal-card">
+                        <h4>Lunch · 1:00 PM</h4>
+                        <p>Large plate of rice<br>Chicken/fish stew<br>Vegetables (ugu, spinach)<br>1 moi moi</p>
+                    </div>
+                    <div class="meal-card">
+                        <h4>Pre-Workout · 4:00 PM</h4>
+                        <p>1 plantain (boiled or fried)<br>Small glass of zobo</p>
+                    </div>
+                    <div class="meal-card">
+                        <h4>Post-Workout · 6:30 PM</h4>
+                        <p>2 boiled eggs<br>1 banana<br>Water</p>
+                    </div>
+                    <div class="meal-card">
+                        <h4>Dinner · 8:00 PM</h4>
+                        <p>Yam porridge<br>Fish/egusi soup<br>Vegetables</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Weekly Shopping List</h3>
+                <table class="tracking-table">
+                    <thead>
+                        <tr><th>Item</th><th>Quantity</th><th>Estimated Cost (₦)</th><th>Priority</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Eggs</td><td>2 crates (60 eggs)</td><td>3,000 – 3,500</td><td>High</td></tr>
+                        <tr><td>Beans (ewa)</td><td>2 kg</td><td>1,200</td><td>High</td></tr>
+                        <tr><td>Rice</td><td>5 kg</td><td>3,500</td><td>High</td></tr>
+                        <tr><td>Chicken</td><td>2 kg</td><td>3,000</td><td>Medium</td></tr>
+                        <tr><td>Fish (Titus)</td><td>10 pieces</td><td>2,500</td><td>Medium</td></tr>
+                        <tr><td>Groundnuts</td><td>1 kg</td><td>800</td><td>Medium</td></tr>
+                        <tr><td>Yam</td><td>3 large tubers</td><td>1,500</td><td>High</td></tr>
+                        <tr><td>Plantain</td><td>1 bunch</td><td>1,000</td><td>Medium</td></tr>
+                        <tr><td>Bananas</td><td>1 bunch</td><td>800</td><td>Medium</td></tr>
+                        <tr><td>Vegetables</td><td>Various</td><td>1,500</td><td>High</td></tr>
+                        <tr><td>Milk</td><td>2 liters</td><td>1,200</td><td>Medium</td></tr>
+                        <tr><td>Bread</td><td>2 loaves</td><td>1,000</td><td>Medium</td></tr>
+                    </tbody>
+                </table>
+                <p class="mt-1" style="color: var(--brass);"><strong>Total Estimated Weekly Cost:</strong> ₦20,000 – ₦25,000</p>
+            </div>
+        </section>
+
+        <!-- ============ PROGRESS ============ -->
+        <section id="progress" class="section-content">
+            <h2 class="page-heading">Progress Tracking</h2>
+
+            <div class="dashboard">
+                <div class="card">
+                    <h3>Body Measurements</h3>
+                    <table class="tracking-table">
+                        <thead><tr><th>Measurement</th><th>Starting</th><th>Current</th><th>Goal</th></tr></thead>
+                        <tbody>
+                            <tr><td>Weight (kg)</td><td>65</td><td><input type="number" id="trackWeight" value="65"></td><td>75-78</td></tr>
+                            <tr><td>Chest (cm)</td><td><input type="number" placeholder="90"></td><td>—</td><td>105</td></tr>
+                            <tr><td>Arms (cm)</td><td><input type="number" placeholder="28"></td><td>—</td><td>35</td></tr>
+                            <tr><td>Waist (cm)</td><td><input type="number" placeholder="76"></td><td>—</td><td>80</td></tr>
+                            <tr><td>Thighs (cm)</td><td><input type="number" placeholder="50"></td><td>—</td><td>60</td></tr>
+                        </tbody>
+                    </table>
+                    <button onclick="saveMeasurements()" class="mt-1" style="border: 1px solid var(--accent); color: var(--accent-hover);">Save Measurements</button>
+                </div>
+
+                <div class="card">
+                    <h3>Strength Tests</h3>
+                    <div class="metric-grid">
+                        <div class="metric"><div class="metric-value" id="testPushups">0</div><div class="metric-label">Max Push-ups</div></div>
+                        <div class="metric"><div class="metric-value" id="testSquats">0</div><div class="metric-label">Max Squats</div></div>
+                        <div class="metric"><div class="metric-value" id="testPlank">0</div><div class="metric-label">Plank (sec)</div></div>
+                    </div>
+                    <button onclick="recordStrengthTest()" class="mt-1" style="border: 1px solid var(--accent); color: var(--accent-hover);">Record Test</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Habit Tracker — Current Month</h3>
+                <p class="text-faint">Tap a day to mark it trained.</p>
+                <div class="habit-grid" id="habitTracker"></div>
+            </div>
+        </section>
+
+        <!-- ============ RESOURCES ============ -->
+        <section id="resources" class="section-content">
+            <h2 class="page-heading">Resources &amp; Education</h2>
+
+            <div class="section-tabs">
+                <button class="tab-btn active" onclick="showResource(this, 'posture')">Posture</button>
+                <button class="tab-btn" onclick="showResource(this, 'mobility')">Mobility</button>
+                <button class="tab-btn" onclick="showResource(this, 'recovery')">Recovery</button>
+                <button class="tab-btn" onclick="showResource(this, 'science')">Science</button>
+            </div>
+
+            <div id="resource-posture" class="resource-content">
+                <div class="card">
+                    <h3>Posture Correction System</h3>
+                    <h4>Common Issues &amp; Fixes</h4>
+
+                    <div class="exercise-block">
+                        <div class="exercise-name">Rounded Shoulders</div>
+                        <div class="exercise-details">
+                            <div class="detail-item"><div class="detail-label">Cause</div><div class="detail-value">Weak upper back, tight chest</div></div>
+                            <div class="detail-item"><div class="detail-label">Fix</div><div class="detail-value">Face pulls, band pull-aparts, chest stretches</div></div>
+                            <div class="detail-item"><div class="detail-label">Daily Exercise</div><div class="detail-value">Wall angels — 3 sets of 10</div></div>
+                        </div>
+                    </div>
+
+                    <div class="exercise-block">
+                        <div class="exercise-name">Forward Head Posture</div>
+                        <div class="exercise-details">
+                            <div class="detail-item"><div class="detail-label">Cause</div><div class="detail-value">Phone/computer use, weak neck</div></div>
+                            <div class="detail-item"><div class="detail-label">Fix</div><div class="detail-value">Chin tucks, neck extensions, upper back strengthening</div></div>
+                            <div class="detail-item"><div class="detail-label">Daily Exercise</div><div class="detail-value">Chin tucks — 3 sets of 15</div></div>
+                        </div>
+                    </div>
+
+                    <div class="exercise-block">
+                        <div class="exercise-name">Anterior Pelvic Tilt</div>
+                        <div class="exercise-details">
+                            <div class="detail-item"><div class="detail-label">Cause</div><div class="detail-value">Tight hip flexors, weak glutes/core</div></div>
+                            <div class="detail-item"><div class="detail-label">Fix</div><div class="detail-value">Hip flexor stretches, glute bridges, core work</div></div>
+                            <div class="detail-item"><div class="detail-label">Daily Exercise</div><div class="detail-value">Glute bridges — 3 sets of 15</div></div>
+                        </div>
+                    </div>
+
+                    <h4>Daily Posture Habits</h4>
+                    <ul class="ref-list">
+                        <li>Stand tall — ears over shoulders, shoulders over hips</li>
+                        <li>Sit with back supported, feet flat</li>
+                        <li>Phone at eye level, not looking down</li>
+                        <li>Sleep on back or side with proper pillow</li>
+                        <li>Take breaks every 30 minutes</li>
+                        <li>Practice diaphragmatic breathing</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="resource-mobility" class="resource-content" style="display: none;">
+                <div class="card">
+                    <h3>Mobility Routines</h3>
+
+                    <h4>Morning Mobility (10 minutes)</h4>
+                    <ol>
+                        <li>Neck circles — 10 each direction</li>
+                        <li>Arm circles — 20 forward, 20 back</li>
+                        <li>Cat-cow stretch — 10 reps</li>
+                        <li>World's greatest stretch — 5 each side</li>
+                        <li>Leg swings — 10 each leg</li>
+                        <li>Ankle circles — 10 each direction</li>
+                        <li>Thoracic rotations — 10 each side</li>
+                    </ol>
+
+                    <h4>Pre-Workout Mobility (5 minutes)</h4>
+                    <ol>
+                        <li>Jumping jacks — 30 seconds</li>
+                        <li>High knees — 30 seconds</li>
+                        <li>Arm swings — 20 reps</li>
+                        <li>Leg swings — 10 each leg</li>
+                        <li>Bodyweight squats — 10 reps</li>
+                        <li>Push-up to downward dog — 5 reps</li>
+                    </ol>
+
+                    <h4>Evening Mobility (15 minutes)</h4>
+                    <ol>
+                        <li>Child's pose — 1 minute</li>
+                        <li>Pigeon pose — 2 minutes each side</li>
+                        <li>Couch stretch — 2 minutes each side</li>
+                        <li>Hamstring stretch — 2 minutes each leg</li>
+                        <li>Chest opener — 2 minutes</li>
+                        <li>Spinal twist — 2 minutes each side</li>
+                        <li>Deep breathing — 3 minutes</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div id="resource-recovery" class="resource-content" style="display: none;">
+                <div class="card">
+                    <h3>Recovery &amp; Sleep Optimization</h3>
+
+                    <h4>Sleep Protocol</h4>
+                    <ul class="ref-list">
+                        <li>Target: 8–9 hours per night</li>
+                        <li>Consistent bedtime (10 PM)</li>
+                        <li>No screens 1 hour before bed</li>
+                        <li>Cool, dark room</li>
+                        <li>No caffeine after 2 PM</li>
+                    </ul>
+
+                    <h4>Recovery Techniques</h4>
+                    <div class="exercise-block"><div class="exercise-name">Active Recovery</div><div class="detail-value mt-1">Light walking, mobility work, stretching on rest days</div></div>
+                    <div class="exercise-block"><div class="exercise-name">Cold Exposure</div><div class="detail-value mt-1">Cold showers (optional) — 2-3 minutes to reduce inflammation</div></div>
+                    <div class="exercise-block"><div class="exercise-name">Breathing</div><div class="detail-value mt-1">4-7-8 breathing: inhale 4s, hold 7s, exhale 8s — reduces stress</div></div>
+
+                    <h4>Deload Weeks</h4>
+                    <p style="color: var(--text-muted);">Every 8 weeks, reduce volume by 50% for one week to allow full recovery and supercompensation.</p>
+                </div>
+            </div>
+
+            <div id="resource-science" class="resource-content" style="display: none;">
+                <div class="card">
+                    <h3>Training Science</h3>
+
+                    <h4>Progressive Overload Principles</h4>
+                    <ul class="ref-list">
+                        <li>Increase reps before increasing difficulty</li>
+                        <li>Master form before progressing</li>
+                        <li>Add tempo variations (slow eccentrics)</li>
+                        <li>Reduce rest periods</li>
+                        <li>Add isometric holds</li>
+                    </ul>
+
+                    <h4>Muscle Growth (Hypertrophy)</h4>
+                    <div class="exercise-block"><div class="exercise-name">Mechanical Tension</div><div class="detail-value mt-1">Lifting challenging weights/bodyweight creates muscle damage that triggers growth</div></div>
+                    <div class="exercise-block"><div class="exercise-name">Metabolic Stress</div><div class="detail-value mt-1">The "burn" from high reps creates cellular swelling and growth factors</div></div>
+                    <div class="exercise-block"><div class="exercise-name">Muscle Damage</div><div class="detail-value mt-1">Micro-tears from training repair stronger (DOMS)</div></div>
+
+                    <h4>Recovery Science</h4>
+                    <p style="color: var(--text-muted);">Muscles grow during rest, not training. Sleep is when growth hormone peaks. Proper nutrition provides building blocks (amino acids).</p>
+                </div>
+            </div>
+        </section>
+
+        <p class="footnote">TOJI PROTOCOL · 365-DAY CALISTHENICS PROGRAM · PROGRESS SAVES LOCALLY IN THIS BROWSER</p>
+    </div>
+
+    <!-- Exercise Detail Modal -->
+    <div class="modal" id="exerciseModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
