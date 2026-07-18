@@ -8,18 +8,26 @@ nutrition plan, and progress tracking — all in plain HTML/CSS/JS.
 
 ```
 toji-protocol/
-├── index.html              → the whole app (structure/markup)
+├── index.html               → the whole app (structure/markup)
 ├── css/
-│   └── styles.css          → design system + all styling
+│   └── styles.css           → design system + all styling
 ├── js/
-│   ├── data.js              → exercise database & 365-day program data
-│   └── app.js                → all interactive logic (rendering, tracking, storage)
+│   ├── firebase-config.js   → Firebase project setup (fill in your own config)
+│   ├── auth.js               → sign up / log in / log out / Google auth
+│   ├── firestore.js          → reads & writes progress to Firestore
+│   ├── data.js                → exercise database & 365-day program data
+│   └── app.js                  → all interactive logic (rendering, tracking)
 ├── images/
-│   └── exercises/            → one reference photo per exercise
+│   └── exercises/              → one reference photo per exercise
+├── firestore.rules             → security rules for the Firestore database
+├── FIREBASE_SETUP.md           → one-time setup + deployment instructions
 └── README.md
 ```
 
-No build step, no npm install, no framework — open `index.html` and it runs.
+No build step, no npm install, no framework beyond the Firebase SDK
+(loaded via `<script>` tag, no bundler) — open `index.html` and it runs.
+**Before it'll work, follow `FIREBASE_SETUP.md`** to create a Firebase
+project and drop your config into `js/firebase-config.js`.
 
 ## Opening it in VS Code
 
@@ -52,10 +60,15 @@ Create the empty repo on GitHub first (github.com → New repository), then run 
 
 ## How progress is saved
 
-All tracking (checklist ticks, water intake, habit calendar, measurements,
-strength tests) is saved to your browser's `localStorage` under the key
-`tojiProtocolProgress` — nothing is sent anywhere. Clearing your browser
-data or switching browsers/devices will reset it, since there's no backend.
+Each person signs in (email/password or Google), and all tracking
+(current day, checklist ticks, water intake, habit calendar,
+measurements, strength tests) is saved to a Firestore document unique
+to their account — `users/{their-uid}`. It auto-saves after every
+action, loads automatically on login, and follows them to any device
+they sign into. A new account starts at Day 1; signing back in resumes
+exactly where they left off. See `FIREBASE_SETUP.md` to connect this
+to your own Firebase project, and `firestore.rules` for the security
+rules that keep each user's data private to them.
 
 ## Extending it
 
